@@ -4,16 +4,15 @@ DEFAULT_DIR="." # use current directory by default
 DIR=${1:-$DEFAULT_DIR}
 DIR="$(realpath $DIR)"
 PLUGIN_NAME="$(basename $DIR)"
-
 TMP_DIR="/tmp/wp-plugin/$PLUGIN_NAME"
+
+clear >$(tty)
 
 mkdir -p "$( dirname $TMP_DIR )"
 rm -rf $TMP_DIR
-echo "Copy plugin files to $TMP_DIR..."
+echo "Copying plugin files to $TMP_DIR..."
 cp -R $DIR $TMP_DIR
 cd $TMP_DIR
-
-clear >$(tty)
 
 # call composer install
 if [ -f 'composer.json' ]; then
@@ -27,7 +26,7 @@ if [ -f 'composer.json' ]; then
 	npm install
 fi
 
-echo "Erasing dev files..."
+echo "Erasing development files..."
 
 # erase some dev files
 rm -rf ./.git
@@ -39,15 +38,13 @@ rm -rf ./composer.lock
 rm -rf ./release
 
 # build the zip file
-echo "Criando arquivo zip..."
+echo "Creating zip file..."
 mkdir "$DIR/build"
-rm -rf "$DIR/build/$PLUGIN_NAME.zip"
+rm -rf "$DIR/build/$PLUGIN_NAME.zip" # erase any old build
 cd ..
-zip -r "$DIR/build/$PLUGIN_NAME.zip" "$PLUGIN_NAME"
-
-#clear >$(tty)
+zip -r "$DIR/build/$PLUGIN_NAME.zip" "$PLUGIN_NAME" #zip tmp dir
 
 # erase tmp dir
 rm -rf $TMP_DIR
 
-echo "Arquivo do plugin gerado em build/$PLUGIN_NAME.zip"
+echo "Zip file created in $DIR/build/$PLUGIN_NAME.zip"
