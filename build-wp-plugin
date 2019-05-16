@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+DEFAULT_DIR="." # use current directory by default
+DIR=${1:-$DEFAULT_DIR}
+DIR="$(realpath $DIR)"
+PLUGIN_NAME="$(basename $DIR)"
+
+TMP_DIR="/tmp/wp-plugin/$PLUGIN_NAME"
+
+mkdir -p "$( dirname $TMP_DIR )"
+rm -rf $TMP_DIR
+echo "Copy plugin files to $TMP_DIR..."
+cp -R $DIR $TMP_DIR
+cd $TMP_DIR
+
+clear >$(tty)
+
+# call composer install
+if [ -f 'composer.json' ]; then
+	echo "Installing composer dependencies..."
+	composer install
+fi
+
+# call npm install
+if [ -f 'composer.json' ]; then
+	echo "Installing NPM dependencies..."
+	npm install
+fi
+
+echo "Erasing dev files..."
+
+# erase some dev files
+rm -rf ./.git
+rm -rf ./.editorconfig
+rm -rf ./.gitignore
+rm -rf ./node_modules
+rm -rf ./package-lock.json
+rm -rf ./composer.lock
+rm -rf ./release
+
+# build the zip file
+echo "Criando arquivo zip..."
+mkdir "$DIR/build"
+rm -rf "$DIR/build/$PLUGIN_NAME.zip"
+cd ..
+zip -r "$DIR/build/$PLUGIN_NAME.zip" "$PLUGIN_NAME"
+
+#clear >$(tty)
+
+# erase tmp dir
+rm -rf $TMP_DIR
+
+echo "Arquivo do plugin gerado em build/$PLUGIN_NAME.zip"
