@@ -9,7 +9,7 @@ DEST_DIR="wp-build"
 
 clear >$(tty)
 
-mkdir -p "$( dirname $TMP_DIR )"
+mkdir -p "$(dirname $TMP_DIR)"
 rm -rf $TMP_DIR
 echo "Copying plugin files to $TMP_DIR..."
 cp -R $DIR $TMP_DIR
