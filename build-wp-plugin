@@ -5,6 +5,7 @@ DIR=${1:-$DEFAULT_DIR}
 DIR="$(realpath $DIR)"
 PLUGIN_NAME="$(basename $DIR)"
 TMP_DIR="/tmp/wp-plugin/$PLUGIN_NAME"
+DEST_DIR="wp-build"
 
 clear >$(tty)
 
@@ -40,11 +41,11 @@ rm -rf ./release
 # build the zip file
 echo "Creating zip file..."
 mkdir "$DIR/build"
-rm -rf "$DIR/build/$PLUGIN_NAME.zip" # erase any old build
+rm -rf "$DIR/$DEST_DIR/$PLUGIN_NAME.zip" # erase any old build
 cd ..
-zip -r "$DIR/build/$PLUGIN_NAME.zip" "$PLUGIN_NAME" #zip tmp dir
+zip -r "$DIR/$DEST_DIR/$PLUGIN_NAME.zip" "$PLUGIN_NAME" #zip tmp dir
 
 # erase tmp dir
 rm -rf $TMP_DIR
 
-echo "Zip file created in $DIR/build/$PLUGIN_NAME.zip"
+echo "Zip file created in $DIR/$DEST_DIR/$PLUGIN_NAME.zip"
