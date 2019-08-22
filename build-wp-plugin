@@ -18,7 +18,7 @@ cd $TMP_DIR
 # call composer install
 if [ -f 'composer.json' ]; then
 	echo "Installing composer dependencies..."
-	composer install
+	composer install --no-dev
 fi
 
 # call npm install
